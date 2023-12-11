@@ -1,28 +1,32 @@
 import pygame
 import sys
 import time
+import random
 from steak import Steak
 
 # Initialize Pygame
 pygame.init()
 
-class Game():
+class Game:
     def __init__(self):
          # Load images
         self.background_image = pygame.image.load("background.png")  
         self.pan_image = pygame.image.load("pan.png")  
-
+        # self.possibilites = {"Raw:": 10, "Rare": 15, "Medium Rare": 20, "Medium": 25, "Medium Well": 30, " Well": 35, "Burnt": 40}
         self.steak = Steak()
+
+        self.clock = pygame.time.Clock()
+        self.dt = 0
         
+    def play(self):
+        # gameover = False
+        # while not gameover:
+        self.draw()
 
+    def randomize_rarity(self):
+        return random.choice(self.possibilites)
 
-    def play():
-        self.setup()
-
-    def randomize():
-        pass
-
-    def setup():       
+    def draw(self):       
         # Set up display
         width, height = 800, 600
         screen = pygame.display.set_mode((width, height))
@@ -39,8 +43,6 @@ class Game():
         # Resize images
         background_image = pygame.transform.scale(background_image, (width, height))
         pan_image = pygame.transform.scale(pan_image, (300, 120))  # Adjust size as needed
-        steak_image = pygame.transform.scale(steak_image, (100, 100))  # Adjust size as needed
-
         # Game loop
         clock = pygame.time.Clock()
         running = True
@@ -61,40 +63,20 @@ class Game():
             screen.blit(pan_image, pan_right_position)
 
             # Draw steak image in the middle of each pan
-            steak_left_position = (pan_left_position[0] + 100, pan_left_position[1] + 10)
-            steak_right_position = (pan_right_position[0] + 100, pan_right_position[1] + 10)
+            # steak_left_position = (pan_left_position[0] + 60, pan_left_position[1] + 10)
+            # steak_right_position = (pan_right_position[0] + 60, pan_right_position[1] + 10)
 
-            screen.blit(steak_image, steak_left_position)
-            screen.blit(steak_image, steak_right_position)
+            pygame.draw.rect(screen, (255, 0, 0), (x, y, 100, 100))
 
-            # # Draw stopwatch at the bottom
-            # elapsed_time = get_elapsed_time()
-            # stopwatch_text = font.render(f"Time: {elapsed_time:.2f} seconds", True, white)
-            # screen.blit(stopwatch_text, (10, height - 50))
 
             pygame.display.flip()
-            clock.tick(60)
-        
 
-    # # Set up fonts
-    # font = pygame.font.Font(None, 36)
 
-    # # Stopwatch variables
-    # start_time = None
-
-    # def start_stopwatch():
-    #     global start_time
-    #     start_time = time.time()
-
-    # def get_elapsed_time():
-    #     if start_time is not None:
-    #         return time.time() - start_time
-    #     else:
-    #         return 0
-    pygame.quit()
-    sys.exit()
 
 # Create a Game object and run the game
 if __name__ == "__main__":
     game = Game()  # Create the Game object
     game.play()  # Start the game loop
+
+pygame.quit()
+sys.exit()
