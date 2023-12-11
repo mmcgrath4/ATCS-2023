@@ -12,8 +12,8 @@ class Game:
          # Load images
         self.background_image = pygame.image.load("background.png")  
         self.pan_image = pygame.image.load("pan.png")  
-        # self.possibilites = {"Raw:": 10, "Rare": 15, "Medium Rare": 20, "Medium": 25, "Medium Well": 30, " Well": 35, "Burnt": 40}
-        self.steak = Steak()
+        self.possibilites = {"Raw:": 1.5, "Rare": 2, "Medium Rare": 3, "Medium": 4, "Medium Well": 5, " Well": 6, "Burnt": 7}
+        self.steak = Steak(self)
 
         self.clock = pygame.time.Clock()
         self.dt = 0
@@ -38,7 +38,6 @@ class Game:
         # Load images
         background_image = pygame.image.load("background.png")  # Change "background.png" to your background image file
         pan_image = pygame.image.load("pan.png")  # Change "pan.png" to your pan image file
-        steak_image = pygame.image.load("steak.png")  # Load the steak image
 
         # Resize images
         background_image = pygame.transform.scale(background_image, (width, height))
@@ -62,15 +61,9 @@ class Game:
             screen.blit(pan_image, pan_left_position)
             screen.blit(pan_image, pan_right_position)
 
-            # Draw steak image in the middle of each pan
-            # steak_left_position = (pan_left_position[0] + 60, pan_left_position[1] + 10)
-            # steak_right_position = (pan_right_position[0] + 60, pan_right_position[1] + 10)
-
-            pygame.draw.rect(screen, (255, 0, 0), (x, y, 100, 100))
-
+            self.steak.draw_steak(screen)
 
             pygame.display.flip()
-
 
 
 # Create a Game object and run the game
