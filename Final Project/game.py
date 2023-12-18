@@ -1,3 +1,6 @@
+# Code written almost entirely by Mikey McGrath
+# ChatGPT helped with a few of the formatting parts
+
 import pygame
 import sys
 import time
@@ -15,11 +18,13 @@ class Game:
          # Load images
         self.background_image = pygame.image.load("background.png")  
         self.pan_image = pygame.image.load("pan.png")  
+        # States followed by the red_change for each of them
         self.possibilites = {"Raw:": 0, "Rare": 30, "Medium Rare": 60, "Medium": 90, "Medium Well": 120, " Well": 150, "Burnt": 180}
         self.steak = Steak(self)
         self.screen = pygame.display.set_mode((self.WIDTH, self.HEIGHT))
         self.flips = 0
         self.red_change = 0
+        # Initializes all of the time variables
         self.clock = pygame.time.Clock()
         self.dt = 0
         self.current_time = 0
@@ -27,8 +32,9 @@ class Game:
         self.flipped_time = 0
         self.reference_time = 1
 
-        
+    # Main play method
     def play(self):
+        # Sets up the game
         running = True
         self.setup()
         goal_state = self.randomize_rarity()
@@ -47,22 +53,25 @@ class Game:
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.KEYDOWN:
+                    # Flip steak
                     if event.key == pygame.K_f:
                         self.flips += 1
-                        # Flip steak
                         self.reference_time = 1
                         self.red_change = 0
                         side = 2
                         first_side_state = self.steak.get_current_state()
                         self.steak.update(False, side)
                         self.flipped_time = pygame.time.get_ticks()
+                    # Start cooking
                     elif event.key == pygame.K_s:
                         self.start_time = pygame.time.get_ticks()
                         gameStarted = True
+                    # Finish cooking
                     elif event.key == pygame.K_d:
                         second_side_state = self.steak.get_current_state()
                         gameOver = True
             
+            # Calculate time since that side started cooking
             if self.flips == 0:
                 self.current_time = (pygame.time.get_ticks() - self.start_time)/1000
             elif self.flips == 1:
@@ -78,9 +87,7 @@ class Game:
                 
             pygame.display.flip()
         
-        print(first_side_state)
-        print(second_side_state)
-        print(goal_state)
+        # Print post game message
         if first_side_state == goal_state and second_side_state == goal_state:
             self.print_winning_message()
         elif first_side_state != goal_state:
@@ -120,6 +127,7 @@ class Game:
         pygame.display.flip()
         time.sleep(3) 
 
+    # Makes steak darker as time goes on
     def change_color(self):
         if self.red_change > 255:
             self.red_change = 255      
@@ -131,12 +139,14 @@ class Game:
     def draw_goal_steak(self, goal):
         self.steak.draw_steak(self.screen, self.possibilites[goal], False)
     
+    # Checks if it is time to go to next state
     def isTimerUp(self):
         if abs(self.current_time - self.reference_time) < 0.05:
             self.reference_time += 1
             return True
         return False
 
+    # Manages all of the UI
     def setup(self):       
         pygame.display.set_caption("Virtual Environment")
 

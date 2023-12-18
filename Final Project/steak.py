@@ -12,6 +12,7 @@ class Steak():
         self.fsm = FSM("Raw")
         self.init_fsm()
     
+    # Initializes all of the transitions
     def init_fsm(self):
         for i in range(len(self.states)-1):
             self.fsm.add_transition(True, self.states[i], None, self.states[i+1])
@@ -32,6 +33,7 @@ class Steak():
         else:
             pygame.draw.rect(screen, (255 - rDiff, 0, 0), (self.x+450, self.y, 100, 100))
 
+    # Go to next state or start from the beginning if flipping steak
     def update(self, timerUp, side):
         if side > 1:
             self.fsm.process(side)
