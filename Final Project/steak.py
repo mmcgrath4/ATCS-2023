@@ -16,14 +16,25 @@ class Steak():
         for i in range(len(self.states)-1):
             self.fsm.add_transition(True, self.states[i], None, self.states[i+1])
             self.fsm.add_transition(False, self.states[i], None, self.states[i])
+            # Change to next side
+            self.fsm.add_transition(2, self.states[i], None, "Raw")
+        self.fsm.add_transition(2, "Burnt", None, "Raw")
         self.fsm.add_transition(True, "Burnt", None, "Burnt")
+        self.fsm.add_transition(False, "Burnt", None, "Burnt")
+        
+        
+    def get_current_state(self):
+        return self.fsm.current_state
 
-    def draw_steak(self, screen, rDiff, gDiff, isUser):
+    def draw_steak(self, screen, rDiff, isUser):
         if isUser:
-            pygame.draw.rect(screen, (255 - rDiff, 0 + gDiff, 0), (self.x, self.y, 100, 100))
+            pygame.draw.rect(screen, (255 - rDiff, 0, 0), (self.x, self.y, 100, 100))
         else:
-            pygame.draw.rect(screen, (255 - rDiff, 0 + gDiff, 0), (self.x+450, self.y, 100, 100))
+            pygame.draw.rect(screen, (255 - rDiff, 0, 0), (self.x+450, self.y, 100, 100))
 
-    def update(self):
-        self.fsm.process(self.game.isTimerUp())
-        pass
+    def update(self, timerUp, side):
+        if side > 1:
+            self.fsm.process(side)
+        else:
+            self.fsm.process(timerUp)
+
